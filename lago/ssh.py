@@ -48,7 +48,10 @@ def ssh(
     transport = client.get_transport()
     channel = transport.open_session()
 
+    extra_env = str(config.get('ssh_extra_env', ''))
     joined_command = ' '.join(command)
+    if extra_env:
+	joined_command = '%s %s' % (extra_env, joined_command)
     command_id = _gen_ssh_command_id()
     LOGGER.debug(
         'Running %s on %s: %s%s',
